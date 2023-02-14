@@ -32,7 +32,7 @@ const options = {
 const swaggerSpec = swaggerJsDoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
-const uri = "mongodb+srv://test:test123@cluster0.hi7zdj7.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://test:test123@cluster0.n5zxrfk.mongodb.net/?retryWrites=true&w=majority";
 
 const connectionParams = {
     useNewUrlParser: true,
@@ -51,3 +51,5 @@ app.use('/users', userRoutes);
 app.listen(port, () => {
     console.log("app is listening on", port);
 })
+
+module.exports = app;

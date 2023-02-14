@@ -64,7 +64,7 @@ let User = require('../models/user.model');
 
 router.route('/').get((req, res) => {
     User.find()
-        .then(Users => res.json(Users))
+        .then(Users => res.status(200).json(Users))
         .catch(err => res.status(400).json('Error ' + err));
 })
 
@@ -100,7 +100,7 @@ router.route('/add').post((req, res) => {
 
     const newUser = new User({ name, age, createdAt });
     newUser.save()
-        .then(() => res.json('User Added'))
+        .then(() => res.status(200).json('User Added'))
         .catch(err => res.status(400).json('Error ' + err))
 })
 
@@ -148,7 +148,7 @@ router.route('/update/:id').post((req, res) => {
             User.updatedAt = updatedAt;
 
             User.save()
-                .then(() => res.json('User Updated'))
+                .then(() => res.status(200).json('User Updated'))
                 .catch(err => res.status(400).json('Error ' + err))
         })
         .catch(err => res.status(400).json('Error ' + err))
@@ -177,7 +177,7 @@ router.route('/update/:id').post((req, res) => {
  */
 router.route('/:id').delete((req, res) => {
     User.findByIdAndDelete(req.params.id)
-        .then(() => res.json('User Deleted'))
+        .then(() => res.status(200).json('User Deleted'))
         .catch(err => res.status(400).json('Error ' + err))
 })
 
