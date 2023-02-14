@@ -1,15 +1,98 @@
 const router = require('express').Router();
 const moment = require('moment');
+
 let User = require('../models/user.model');
 
-// Get Users
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      User:
+ *          type: object
+ *          required:
+ *              - name
+ *              - age
+ *          properties:
+ *              id:
+ *                  type: string
+ *                  description: The auto-generated id of the book
+ *              name:
+ *                  type: string
+ *                  description: User name
+ *              age:
+ *                  type: number
+ *                  description: User age
+ *              createdAt:
+ *                  type: date
+ *                  description: User created at timestamp
+ *              updatedAt:
+ *                  type: date
+ *                  description: User Updated at timestamp
+ *          example:
+ *              id: 63ea8d3c6dbd38d9f7bd5a14
+ *              name: test
+ *              age: 23
+ *              createdAt: 2023-02-13T19:19:24.269Z
+ *              updatedAt: 2023-02-13T19:19:24.269Z
+ */
+
+/**
+ * @swagger
+ * tags:
+ *  name: Users
+ *  description: The user managing API's
+ */
+
+/* --------- Get Users ----------- */
+
+/**
+ * @swagger
+ * /users:
+ *  get:
+ *      summary: Returns the list of all users
+ *      tags: [Users]
+ *      responses: 
+ *          200:
+ *              description: List of users
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/User'
+ */
+
 router.route('/').get((req, res) => {
     User.find()
         .then(Users => res.json(Users))
         .catch(err => res.status(400).json('Error ' + err));
 })
 
-// Add User
+/* --------- Add Users ----------- */
+
+/**
+ * @swagger
+ * /users/add:
+ *  post:
+ *      summary: Create new user
+ *      tags: [Users]
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/User'
+ *      responses:
+ *          200:
+ *              description: User Added Successfully
+ *              content:
+ *                  applictaion/json:
+ *                      schema:
+ *                      $ref: '#/components/schemas/User'
+ *          500:
+ *              description: Server Error
+ */
+
 router.route('/add').post((req, res) => {
     const name = req.body.name;
     const age = req.body.age;
@@ -21,7 +104,40 @@ router.route('/add').post((req, res) => {
         .catch(err => res.status(400).json('Error ' + err))
 })
 
-// Update User
+/* --------- Update Users ----------- */
+
+/**
+ * @swagger
+ * /users/update/{id}:
+ *  post:
+ *      summary: Update user
+ *      tags: [Users]
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              schema:
+ *                  type: string
+ *              required: true
+ *              description: User id
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/User'
+ *      responses:
+ *          200:
+ *              description: User Updated Successfully
+ *              content:
+ *                  applictaion/json:
+ *                      schema:
+ *                      $ref: '#/components/schemas/User'
+ *          404:
+ *              description: User not found
+ *          500:
+ *              description: Server Error
+ */
+
 router.route('/update/:id').post((req, res) => {
     const updatedAt = moment().toDate();
 
@@ -38,7 +154,27 @@ router.route('/update/:id').post((req, res) => {
         .catch(err => res.status(400).json('Error ' + err))
 })
 
-// Delete User
+/* --------- Delete Users ----------- */
+
+/**
+ * @swagger
+ * /users/{id}:
+ *  delete:
+ *      summary: Remove user by id
+ *      tags: [Users]
+ *      parameters:
+ *          -   in: path
+ *              name: id
+ *              schema:
+ *                  type: string
+ *              required: true
+ *              description: user id
+ *      responses:
+ *          200:
+ *              description: User Deleted
+ *          404:
+ *              description: User not found
+ */
 router.route('/:id').delete((req, res) => {
     User.findByIdAndDelete(req.params.id)
         .then(() => res.json('User Deleted'))
